@@ -1,64 +1,52 @@
-#include "message.h"
-#include <iostream>
-#include <ctime>
-#include <fstream>
-#include <string>
-#include <vector>
+#define _CRT_SECURE_NO_WARNINGS
+#include "functions.h"
 
 using namespace std;
 
-void MessageLog::coutElem() {
-    cout << this->id << ' ' << this->countWords << ' ' << this->text << ' ' << this->timeCreated.year << ' ' << this->timeCreated.month
+
+int Message::toCountWords(const string& s) {
+    if (s.size() == 0)
+        return 0;
+    int count = 0;
+    for (int i = 0; i < s.size() - 1; i++)
+        if (s[i] == ' ' && s[i + 1] != ' ')
+            count++;
+    if (s[s.size()] != ' ')
+        count++;
+    if (s[0] == ' ')
+        count--;
+
+    return count;
+}
+
+void Message::outElem() {
+    cout << this->id << ' ' << this->countWords << ' ' << this->text << "\t\t" << this->timeCreated.year << ' ' << this->timeCreated.month
         << ' ' << this->timeCreated.day << ' ' << this->timeCreated.hour << ' ' << this->timeCreated.minutes << ' ' << this->timeCreated.sec
         << ' ' << this->typeOfError << ' ' << this->priority << ' ' << this->loading << ' ' << '\n';
 }
-
-void MessageLog::saveToDisk() {
-
-
-    ofstream file("data.txt", ios_base::app);
-    if (!file) {
-        cout << "txt is closed \n";
-        return;
-    }
-
-    file << this->id << ' ' << this->countWords << ' ' << this->text << ' ' << this->timeCreated.year << ' ' << this->timeCreated.month
-        << ' ' << this->timeCreated.day << ' ' << this->timeCreated.hour << ' ' << this->timeCreated.minutes << ' ' << this->timeCreated.sec
-        << ' ' << this->typeOfError << ' ' << this->priority << ' ' << this->loading << '\n';
-
-    file.close();
-
-    ofstream bin("binary.txt", ios_base::binary | ios_base::app);
-    if (!bin) {
-        cout << "bin is closed \n";
-        return;
-    }
-    bin.write((char*)&this->id, sizeof(this->id)); //id
-
-    int lengthText = this->text.size();
-    bin.write((char*)&this->countWords, sizeof(this->countWords));
-    bin.write((char*)&lengthText, sizeof(lengthText));
-    bin << this->text; //text
-
-    bin.write((char*)&this->timeCreated.year, sizeof(this->timeCreated.year));
-    bin.write((char*)&this->timeCreated.month, sizeof(this->timeCreated.month));
-    bin.write((char*)&this->timeCreated.day, sizeof(this->timeCreated.day));
-    bin.write((char*)&this->timeCreated.hour, sizeof(this->timeCreated.hour));
-    bin.write((char*)&this->timeCreated.minutes, sizeof(this->timeCreated.minutes));
-    bin.write((char*)&this->timeCreated.sec, sizeof(this->timeCreated.sec)); //time
-
-    int lengthTypeOfError = this->typeOfError.size();
-    bin.write((char*)&lengthTypeOfError, sizeof(lengthTypeOfError));
-    bin << this->typeOfError; //typeOfError
-
-    bin.write((char*)&this->priority, sizeof(this->priority)); //priority
-
-    bin.write((char*)&this->loading, sizeof(this->loading)); //loading
-
-    bin.close();
+void FullTime::setCurrentTime(int delta) {
+    time_t seconds = time(nullptr) + delta;
+    tm* timeInfo = localtime(&seconds);
+    char* t_tim = asctime(timeInfo);
+    string m_month = "123";
+    m_month[0] = t_tim[4];
+    m_month[1] = t_tim[5];
+    m_month[2] = t_tim[6];
+    string _month[12] = {
+            "Jan", "Feb", "Mar", "Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
+    };
+    bool flag = true;
+    for (month = 0; month < 12 && flag; month++)
+        if (_month[month] == m_month)
+            flag = false;
+    day = (t_tim[8] - '0') * 10 + t_tim[9] - '0';
+    hour = (t_tim[11] - '0') * 10 + t_tim[12] - '0';
+    minutes = (t_tim[14] - '0') * 10 + t_tim[15] - '0';
+    sec = (t_tim[17] - '0') * 10 + t_tim[18] - '0';
+    year = (t_tim[20] - '0') * 1000 + (t_tim[21] - '0') * 100 + (t_tim[22] - '0') * 10 + t_tim[23] - '0';
 }
 
-bool FullTime::moreThen(FullTime secondTime) {
+bool FullTime::moreThen(FullTime secondTime) const {
     if (year == secondTime.year)
         ;
     else
@@ -84,8 +72,4 @@ bool FullTime::moreThen(FullTime secondTime) {
     else
         return sec > secondTime.sec;
     return true;
-}
-
-void FullTime::coutTime() {
-    cout << year << ' ' << month << ' ' << day << ' ' << hour << ' ' << minutes << ' ' << sec << endl;
 }
