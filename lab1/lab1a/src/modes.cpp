@@ -1,8 +1,7 @@
 #include "modes.h"
-#include "functions.h"
-#include <cstring>
 
-bool interactive(Functions functions) {
+bool interactive() {
+    MessageLog log("data");
     bool flag = true;
     string subStr;
     string neededType;
@@ -34,63 +33,63 @@ bool interactive(Functions functions) {
             cout << "Enter text of message\n";
             cin.ignore();
             getline(cin, newMessage, '\n');
-            functions.createNewElemAndAddToVector(newMessage);
+            log.createNewElemAndAddToVector(newMessage);
             break;
         case 2:
-            functions.saveToFile();
+            log.saveToFile();
             break;
         case 3:
-            if (!functions.log.empty()) {
-                cout << "Vector has " << functions.log.size() << " element\n"
+            if (!log.emptyVector()) {
+                cout << "Vector has " << log.countMessagesInTheVector() << " element\n"
                     << "Do you want to save them to files(1) or clear the vector(2)? Enter 1 or 2\n";
                 int action2;
                 cin >> action2;
                 switch (action2) {
                 case 1:
-                    functions.saveToFile();
-                    functions.readingFromTxt();
+                    log.saveToFile();
+                    log.readFromTxt();
                     break;
                 case 2:
-                    functions.log.clear();
-                    functions.readingFromTxt();
+                    log.clearVector();
+                    log.readFromTxt();
                 }
             }
             else
-                functions.readingFromTxt();
+                log.readFromTxt();
             break;
         case 4:
-            if (!functions.log.empty()) {
-                cout << "Vector has " << functions.log.size() << " element\n"
+            if (!log.emptyVector()) {
+                cout << "Vector has " << log.countMessagesInTheVector() << " element\n"
                     << "Do you want to save them to files(1) or clear the vector(2)? Enter 1 or 2\n";
                 int action2;
                 cin >> action2;
                 switch (action2) {
                 case 1:
-                    functions.saveToFile();
-                    functions.readingFromBin();
+                    log.saveToFile();
+                    log.readFromBin();
                     break;
                 case 2:
-                    functions.log.clear();
-                    functions.readingFromBin();
+                    log.clearVector();
+                    log.readFromBin();
                 }
             }
             else
-                functions.readingFromBin();
+                log.readFromBin();
             break;
         case 5:
-            functions.coutFromVector();
+            log.outFromVector();
             break;
         case 6:
-            Functions::coutFromTxt();
+            log.outFromTxt();
             break;
         case 7:
-            Functions::coutFromBin();
+            log.outFromBin();
             break;
         case 8:
             cout << "Enter count of messages\n";
             int countOfMessages;
             cin >> countOfMessages;
-            functions.generateMessages(countOfMessages);
+            log.generateMessagesToFile(countOfMessages);
             break;
         case 9:
             cout << "Enter data before\n"
@@ -103,7 +102,8 @@ bool interactive(Functions functions) {
             FullTime timeAfter;
             cin >> timeAfter.year >> timeAfter.month >> timeAfter.day
                 >> timeAfter.hour >> timeAfter.minutes >> timeAfter.sec;
-            Functions::searchingBetweenTime(timeBefore, timeAfter);
+            for (auto i : log.searchBetweenTime(timeBefore, timeAfter))
+                i.outElem();
             break;
         case 10:
             cout << "Choose a type of message\n"
@@ -112,46 +112,51 @@ bool interactive(Functions functions) {
             cout << "Choose a loading of message\n";
             double neededLoading;
             cin >> neededLoading;
-            Functions::searchingTypeAndLoading(neededType, neededLoading);
+
+            for (auto i : log.searchTypeAndLoading(neededType, neededLoading))
+                i.outElem();
             break;
         case 11:
             cout << "Enter substring which is start of the message\n";
             cin >> subStr;
-            Functions::searchingSubString(subStr);
+            for (auto i : log.searchSubString(subStr))
+                i.outElem();
             break;
         case 12:
-            functions.clearFiles();
+            log.clearFiles();
             cout << "Files were successfully cleared :)\n";
             break;
         case 13:
-            functions.log.clear();
+            log.clearVector();
             break;
         case 14:
-            functions.coutFromTxt();
+            log.outFromTxt();
             cout << "Enter id of the message which you want to delete\n";
             int idOfDeletedElement;
             cin >> idOfDeletedElement;
-            functions.deleteOneMessage(idOfDeletedElement);
+            log.deleteOneMessage(idOfDeletedElement);
             break;
         case 15:
-            functions.coutFromTxt();
+            log.outFromTxt();
             cout << "Enter id of the message which you want to update\n";
             int idOfUpdatedElement;
             cin >> idOfUpdatedElement;
             cout << "Enter new message\n";
             cin.ignore();
             getline(cin, newMessage, '\n');
-            functions.updateOneMessage(idOfUpdatedElement, newMessage);
+            log.updateOneMessage(idOfUpdatedElement, newMessage);
             break;
         case 100:
             flag = false;
             break;
         default: cout << "Choose correct number\n";
         }
-        cout << "Do you want to continue working? y/n\n";
-        char next;
-        cin >> next;
-        flag = next == 'y';
+        if (flag) {
+            cout << "Do you want to continue working? y/n\n";
+            char next;
+            cin >> next;
+            flag = next == 'y';
+        }
     }
     cout << "Do you want to choose a mode? y/n\n";
     char next;
@@ -161,60 +166,55 @@ bool interactive(Functions functions) {
 };
 
 bool demonstration() {
-    Functions func;
-    func.clearFiles();
-    Functions::defineId();
+    MessageLog log("demo");
+    log.clearFiles();
+    log.defineId();
 
     cout << "DEMONSTRATION MODE HAS BEEN STARTED\n";
     cout << "Let's create new message\n";
-    func.createNewElemAndAddToVector("We have created new mess");
+    log.createNewElemAndAddToVector("We have created new mess");
     cout << "Let's see what we have done\n\n";
-    func.coutFromVector();
+    log.outFromVector();
     cout << "\nOkay, save to txt and bin files\n\n";
-    func.saveToFile();
+    log.saveToFile();
     cout << "Now, we have in txt:\n\n";
-    Functions::coutFromTxt();
+    log.outFromTxt();
     cout << "\n...and in bin:\n\n";
-    Functions::coutFromBin();
+    log.outFromBin();
     cout << "\nIts too long, let's generate 10 messages quickly and add them to files\n";
-    func.generateMessages(10);
+    log.generateMessagesToFile(10);
     cout << "Now, we have in txt:\n\n";
-    Functions::coutFromTxt();
+    log.outFromTxt();
     cout << "Let's delete a message. For example, 5th\n";
-    func.deleteOneMessage(5);
+    log.deleteOneMessage(5);
     cout << "Now, we have in txt:\n\n";
-    Functions::coutFromTxt();
+    log.outFromTxt();
     cout << "\nLet's update a message. For example, 7th and enter new message 'Smells like teen spirits'\n\n";
-    func.updateOneMessage(7, "Smells like teen spirits");
+    log.updateOneMessage(7, "Smells like teen spirits");
     cout << "Now, we have in txt:\n\n";
-    Functions::coutFromTxt();
+    log.outFromTxt();
     cout << "Last part of demo: searching\n";
     cout << "\n1) searchingSubString(Smells)\n\n";
-    Functions::searchingSubString("Smells");
+    for (auto i : log.searchSubString("Smells"))
+        i.outElem();
     cout << "\n2) searchingTypeAndLoading(warning, 0.1);\n\n";
-    Functions::searchingTypeAndLoading("warning", 0.1);
+    for (auto i : log.searchTypeAndLoading("warning", 0.1))
+        i.outElem();
+
     FullTime timeBefore, timeAfter;
-    timeBefore.year = func.log[0].timeCreated.year;
-    timeBefore.month = func.log[0].timeCreated.month;
-    timeBefore.day = func.log[0].timeCreated.day;
-    timeBefore.hour = func.log[0].timeCreated.hour;
-    timeBefore.minutes = func.log[0].timeCreated.minutes;
-    timeBefore.sec = max(func.log[0].timeCreated.sec - 5, 0);
-    timeAfter.year = func.log[0].timeCreated.year;
-    timeAfter.month = func.log[0].timeCreated.month;
-    timeAfter.day = func.log[0].timeCreated.day;
-    timeAfter.hour = func.log[0].timeCreated.hour;
-    timeAfter.minutes = func.log[0].timeCreated.minutes;
-    timeAfter.sec = min(func.log[0].timeCreated.sec + 5, 59);
+    timeBefore.setCurrentTime(-5);
+    timeAfter.setCurrentTime(5);
     cout << "\n3) searchingBetweenTime(" << timeBefore.year << "." << timeBefore.month << "." << timeBefore.day << " "
         << timeBefore.hour << ":" << timeBefore.minutes << ":" << timeBefore.sec << ", ";
     cout << timeAfter.year << "." << timeAfter.month << "." << timeAfter.day << " "
         << timeAfter.hour << ":" << timeAfter.minutes << ":" << timeAfter.sec << ")\n\n";
-    Functions::searchingBetweenTime(timeBefore, timeAfter);
+    for (auto i : log.searchBetweenTime(timeBefore, timeAfter))
+        i.outElem();
 
+    log.clearFiles();
     cout << "\nTHE END OF DEMO MOD\n";
     cout << "Do you want to choose a mode? y/n\n";
-    bool flag = true;
+    bool flag;
     char next;
     cin >> next;
     flag = next == 'y';
@@ -222,28 +222,32 @@ bool demonstration() {
 }
 
 bool benchmark() {
-    bool flag = true;
-    Functions func;
+    bool flag;
+    MessageLog log("bench");
     int countMessages = 10;
     double allTime = 0;
 
     benchData data{ 0,0,0,0 };
     while (allTime < 10) {
-        func.clearFiles();
-        MessageLog::count = 0;
+        log.clearFiles();
+        log.clearVector();
+        log.defineId();
+
         cout << endl << "Count of messages " << countMessages << endl;
-        data = func.forBenchmark(countMessages);
+        data = log.forBenchmark(countMessages);
         allTime = data.timeGeneratingAndSaving + data.timeReading + data.timeSearching;
         cout << "timeGeneratingAndSaving = " << data.timeGeneratingAndSaving << endl;
         cout << "timeReading = " << data.timeReading << endl;
         cout << "timeSearching = " << data.timeSearching << endl;
         cout << "All time = " << allTime << endl;
         cout << "Memory = " << data.memoryOfData << "MB " << endl << endl;
+
         if (allTime > 1)
             countMessages += countMessages;
         else
             countMessages *= 10;
     }
+
     cout << "Do you want to choose a mode? y/n\n";
     char next;
     cin >> next;

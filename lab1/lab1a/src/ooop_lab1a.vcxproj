@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{48693eb9-51eb-41f7-98ff-822afd2495be}</ProjectGuid>
-    <RootNamespace>oooplab1abeforerefactoring</RootNamespace>
+    <ProjectGuid>{f854224e-2600-4eaf-8abd-ec328106dad7}</ProjectGuid>
+    <RootNamespace>oooplab1aafterrefactoring</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,15 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="functions.cpp" />
-    <ClCompile Include="message.cpp" />
-    <ClCompile Include="modes.cpp" />
-    <ClCompile Include="ooop_lab1a_before_refactoring.cpp" />
+    <ClCompile Include="doctest_main.cpp" />
+    <ClCompile Include="Logging.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="Mode.cpp" />
+    <ClCompile Include="ooop_lab1a_after_refactoring.cpp" />
+    <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="functions.h" />
-    <ClInclude Include="message.h" />
-    <ClInclude Include="modes.h" />
+    <ClInclude Include="doctest.h" />
+    <ClInclude Include="Logging.h" />
+    <ClInclude Include="Mode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,24 +1,18 @@
-﻿// ooop_lab1a_before_refactoring.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// ooop_lab1a_after_refactoring.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
-#include "message.h"
-#include "functions.h"
-#include "modes.h"
-#include <vector>
+#include "Mode.h"
+//#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+//#include "doctest.h"
 
-using namespace std;
+namespace test {
+    int main_test(int argc, char* argv[]);
+}
 
-int MessageLog::count = 0;
+int main(int argc, char* argv[]) {
 
-int main()
-{
-    Functions function;
-    MessageLog message;
-
-    function.log.clear();
-
-    Functions::defineId();
+    test::main_test(argc, argv);
 
     bool check = true;
 
@@ -31,7 +25,7 @@ int main()
         short action;
         cin >> action;
         switch (action) {
-        case 1: check = interactive(function);
+        case 1: check = interactive();
             break;
         case 2: check = demonstration();
             break;
