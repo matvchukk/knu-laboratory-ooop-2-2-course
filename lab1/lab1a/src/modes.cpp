@@ -1,5 +1,5 @@
-#include "Mode.h"
-#include "Methods.h"
+#include "modes.h"
+#include "functions.h"
 #include <cstring>
 
 bool interactive(Functions functions) {

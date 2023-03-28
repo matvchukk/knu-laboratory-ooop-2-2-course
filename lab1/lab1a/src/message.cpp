@@ -1,4 +1,4 @@
-#include "Message.h"
+#include "message.h"
 #include <iostream>
 #include <ctime>
 #include <fstream>

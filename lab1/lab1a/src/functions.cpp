@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "Methods.h"
+#include "functions.h"
 #include <fstream>
 #include <iostream>
 
@@ -156,7 +156,6 @@ void Functions::createNewElemAndAddToVector(string message) {
     mess.countWords = function.countWords(mess.text);
 
     time_t seconds = time(nullptr);
-
     tm* timeinfo = localtime(&seconds);
     char* t_tim = asctime(timeinfo);
     string m_month = "123";

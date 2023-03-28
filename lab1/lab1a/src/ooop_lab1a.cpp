@@ -1,23 +1,18 @@
-﻿// ooop_lab1a.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// ooop_lab1a_before_refactoring.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
-#include "Message.h"
-#include "Methods.h"
-#include "Mode.h"
+#include "message.h"
+#include "functions.h"
+#include "modes.h"
 #include <vector>
 
 using namespace std;
 
 int MessageLog::count = 0;
 
-namespace test {
-    int main_test(int argc, char* argv[]);
-}
-
 int main()
 {
-    //test::main_test(argc, argv);
     Functions function;
     MessageLog message;
 

@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef LABOR1_MESSAGE_H
+#define LABOR1_MESSAGE_H
 #include <string>
 #include <ctime>
 #include <fstream>
@@ -36,3 +36,5 @@ public:
     void coutElem();
     void saveToDisk();
 };
+
+#endif //LABOR1_MESSAGE_H

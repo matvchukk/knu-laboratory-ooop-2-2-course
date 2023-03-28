@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LABOR1_FUNCTIONS_H
+#define LABOR1_FUNCTIONS_H
 #include "message.h"
 
 using namespace std;
@@ -52,3 +53,5 @@ public:
     benchData forBenchmark(int);//generate N message, save to files,
                         //reading from files and searching random element
 };
+
+#endif //LABOR1_FUNCTIONS_H
