@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['year_0',['year',['../class_full_time.html#a18ca004e02c5433f4f7be06f5b34c2d3',1,'FullTime']]]
+  ['updateonemessage_0',['updateOneMessage',['../class_message_log.html#accbb3ba427f0834e760a2e7de04c6e58',1,'MessageLog']]]
 ];

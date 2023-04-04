@@ -1,8 +1,12 @@
 var searchData=
 [
-  ['test_0',['test',['../namespacetest.html',1,'']]],
-  ['timegeneratingandsaving_1',['timeGeneratingAndSaving',['../structbench_data.html#a3ec40afd1059570dbd7ced910e57e381',1,'benchData']]],
-  ['timereading_2',['timeReading',['../structbench_data.html#af9e4d71f684c8ffc6b0846786ea13cc0',1,'benchData']]],
-  ['timesearching_3',['timeSearching',['../structbench_data.html#ab665754d41aa19ddce89ff0a26dbabfd',1,'benchData']]],
-  ['tocountwords_4',['toCountWords',['../class_message.html#ab0e2edc226b3d35977b314e4d0a68bf5',1,'Message']]]
+  ['savetofile_0',['saveToFile',['../class_message_log.html#a5ddf26f35d160b5d65c71d3c03c76865',1,'MessageLog']]],
+  ['searchbetweentime_1',['searchBetweenTime',['../class_message_log.html#af8adc3a3252254339e4b187f750c89db',1,'MessageLog']]],
+  ['searchsubstring_2',['searchSubString',['../class_message_log.html#aae63a53f8e06f6363979b0c397b739c5',1,'MessageLog']]],
+  ['searchtypeandloading_3',['searchTypeAndLoading',['../class_message_log.html#a89e50ad2d7e462260b23e1e60f3fa8c3',1,'MessageLog']]],
+  ['sec_4',['sec',['../class_full_time.html#ae9cd9e81625d93072a90fdc19d01f584',1,'FullTime']]],
+  ['setcurrenttime_5',['setCurrentTime',['../class_full_time.html#a21ce7a99c28539c7f98f16bcb1c113fc',1,'FullTime']]],
+  ['setloading_6',['setLoading',['../class_message.html#a3be0e9a1f3d8829798468d8a5b340fbb',1,'Message']]],
+  ['settypeoferror_7',['setTypeOfError',['../class_message.html#ab6caaabfba12ce11c8013c774c14b498',1,'Message']]],
+  ['substring_8',['subString',['../class_message_log.html#a2d747733a6eb480c2d4aadc3c725aaf2',1,'MessageLog']]]
 ];
