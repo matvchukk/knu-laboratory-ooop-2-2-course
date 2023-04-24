@@ -1,27 +1,20 @@
 #include "functions.h"
 
-MessageLog::MessageLog(const string& newFileName) {
-    fileName = newFileName;
-    currentFreeId = 0;
+MessageLog::MessageLog(const std::string& newFileName) :
+    fileName(newFileName), currentFreeId(0) {
     log.clear();
     defineId();
 }
-
-void MessageLog::defineId() {
+void MessageLog::defineId()
+{
     ifstream file(fileName + ".txt");
     Message mess;
-    if (file.peek() == EOF) {
-        currentFreeId = 0;
-        return;
-    }
     while (file >> mess.id >> mess.countWords) {
         mess.text = "";
-        string s;
         currentFreeId = max(currentFreeId, mess.id + 1);
-        for (int i = 0; i < mess.countWords; i++)
-            file >> s;
-        file >> mess.timeCreated.year >> mess.timeCreated.month
-            >> mess.timeCreated.day >> mess.timeCreated.hour >> mess.timeCreated.minutes >> mess.timeCreated.sec
+        getline(file >> ws, mess.text);
+        file >> mess.timeCreated.year >> mess.timeCreated.month >> mess.timeCreated.day
+            >> mess.timeCreated.hour >> mess.timeCreated.minutes >> mess.timeCreated.sec
             >> mess.typeOfError >> mess.priority >> mess.loading;
     }
     file.close();
@@ -35,16 +28,18 @@ void MessageLog::clearVector() {
 int MessageLog::countMessagesInTheVector() {
     return log.size();
 }
-//Вывод
 void MessageLog::outFromVector() const {
     for (auto i : log)
         i.outElem();
 }
-void MessageLog::outFromTxt() const {
+void MessageLog::outFromTxt() const
+{
     ifstream file(fileName + ".txt");
     string s;
-    while (getline(file, s))
+    while (!file.eof()) {
+        getline(file, s);
         cout << s << endl;
+    }
     file.close();
 }
 void MessageLog::outFromBin() const {
@@ -52,29 +47,22 @@ void MessageLog::outFromBin() const {
     tempLog.readFromBin();
     tempLog.outFromVector();
 }
-//Чтение
-void MessageLog::readFromTxt(bool inTemp) {
+void MessageLog::readFromTxt(bool inTemp)
+{
     ifstream file(fileName + ".txt");
     Message mess;
     while (file >> mess.id >> mess.countWords) {
         mess.text = "";
-        string s;
-        for (int i = 0; i < mess.countWords; i++) {
-            file >> s;
-            if (i == mess.countWords - 1)
-                mess.text += s;
-            else
-                mess.text += s + " ";
-        }
-        file >> mess.timeCreated.year >> mess.timeCreated.month
-            >> mess.timeCreated.day >> mess.timeCreated.hour >> mess.timeCreated.minutes >> mess.timeCreated.sec
+        getline(file >> ws, mess.text);
+        file >> mess.timeCreated.year >> mess.timeCreated.month >> mess.timeCreated.day
+            >> mess.timeCreated.hour >> mess.timeCreated.minutes >> mess.timeCreated.sec
             >> mess.typeOfError >> mess.priority >> mess.loading;
         mess.savedInFiles = true;
 
         if (inTemp)
-            temp.push_back(mess);
+            temp.emplace_back(mess);
         else
-            log.push_back(mess);
+            log.emplace_back(mess);
     }
     file.close();
 }
@@ -126,7 +114,6 @@ void MessageLog::readFromBin(bool inTemp) {
     }
     file.close();
 }
-//Создание
 void MessageLog::createNewElemAndAddToVector(const string& message) {
     Message mess;
     mess.id = currentFreeId;
@@ -140,7 +127,6 @@ void MessageLog::createNewElemAndAddToVector(const string& message) {
     mess.savedInFiles = false;
     log.push_back(mess);
 }
-//Сохранение
 void MessageLog::saveToFile(bool fromTemp) {
     ofstream txt(fileName + ".txt", ios_base::app);
     ofstream bin(fileName + ".bin", ios_base::binary | ios_base::app);
@@ -193,8 +179,6 @@ void MessageLog::saveToFile(bool fromTemp) {
     txt.close();
     bin.close();
 }
-
-//Поиск по критериям
 vector<Message> MessageLog::searchBetweenTime(FullTime timeBefore, FullTime timeAfter) {
     readFromTxt(true);
     vector<Message> result;
@@ -238,8 +222,6 @@ vector<Message> MessageLog::searchSubString(const string& subStr, bool inVector)
     }
     return result;
 }
-
-//Удаление
 void MessageLog::deleteOneMessage(int id) {
     readFromTxt(true);
     for (int i = 0; i < temp.size(); i++)
@@ -254,7 +236,6 @@ void MessageLog::deleteOneMessage(int id) {
     saveToFile(true);
     temp.clear();
 }
-//Обновление
 void MessageLog::updateOneMessage(int id, const string& newMessage) {
     readFromTxt(true);
     for (auto& i : temp)
@@ -276,7 +257,6 @@ void MessageLog::updateOneMessage(int id, const string& newMessage) {
     saveToFile(true);
     temp.clear();
 }
-//Вспомогательные
 void MessageLog::generateMessagesToFile(int n) {
     for (int i = 0; i < n; i++) {
         Message mess;
@@ -290,25 +270,17 @@ void MessageLog::generateMessagesToFile(int n) {
             newString[0] = rand() % 30 + 92;
             mess.text += newString;
         }
-
         mess.countWords = mess.toCountWords(mess.text);
-
         mess.timeCreated.setCurrentTime();
-
         mess.typeOfError = arrOfErrors[rand() % 5];
-
         mess.priority = (MessageLog::currentFreeId * rand()) % 200;
-
         mess.loading = (double)rand() / RAND_MAX;
-
         mess.savedInFiles = false;
-
         temp.push_back(mess);
     }
     saveToFile(true);
     temp.clear();
 }
-
 bool MessageLog::subString(string main, string subString) {
     for (int i = 0; i < subString.size(); i++)
         if (main[i] != subString[i])
@@ -329,20 +301,16 @@ void MessageLog::clearFiles() {
         currentFreeId = max(currentFreeId, i.id);
     }
 }
-
 benchData MessageLog::forBenchmark(int N) {
     currentFreeId = 0;
-
     double timeGeneratingAndSavingStart = clock();
     generateMessagesToFile(N);
     double timeGeneratingAndSavingEnd = clock();
     double timeGeneratingAndSaving = (timeGeneratingAndSavingEnd - timeGeneratingAndSavingStart) / CLOCKS_PER_SEC;
-
     double timeReadingMessStart = clock();
     readFromTxt();
     double timeReadingMessEnd = clock();
     double timeReading = (timeReadingMessEnd - timeReadingMessStart) / CLOCKS_PER_SEC;
-
 
     double timeSearchingMessStart = clock();
     for (auto i : searchSubString("abcd", true))
