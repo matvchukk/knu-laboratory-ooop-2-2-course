@@ -9,6 +9,8 @@ private:
 	int columns;
 	int rows;
 public:
+	ComplexMatrix() : matrix(nullptr), rows(0), columns(0) {}
+
 	ComplexMatrix(unsigned int rows, unsigned int columns) {
 		matrix = new ComplexNum * [rows];
 		for (int i = 0; i < rows; i++) {

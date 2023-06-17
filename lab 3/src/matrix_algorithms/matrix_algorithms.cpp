@@ -11,21 +11,22 @@
 #include "GaussJordan.h"
 
 int main() {
-    // Set the seed for random number generation
-    std::srand(std::time(0));
-
     // Generate random matrix
     int matrixSize = 4;
     ComplexMatrix A(matrixSize, matrixSize);
     A.auto_gen(5, 50, 5, 50);
-
     std::cout << "Random Matrix A:" << std::endl;
     A.print();
+
+    ComplexMatrix E(matrixSize, matrixSize);
+
+    for (int i = 0; i < matrixSize; i++)
+        E.set(i, i, ComplexNum(1));
 
     // Perform LU decomposition
     ComplexMatrix L(matrixSize, matrixSize);
     ComplexMatrix U(matrixSize, matrixSize);
-    if (LU_decomposition(A, L, U)) {
+    if (LU_Inverse::LU_decomposition(A, L, U)) {
         std::cout << "LU Decomposition:" << std::endl;
         std::cout << "L:" << std::endl;
         L.print();
@@ -37,7 +38,7 @@ int main() {
     }
 
     // Perform inverse matrix calculation using LU decomposition
-    ComplexMatrix inverseA = LU_inverse(A);
+    ComplexMatrix inverseA = LU_Inverse::LU_inverse(A);
     if (inverseA.get_rows() != 0) {
         std::cout << "Inverse Matrix:" << std::endl;
         inverseA.print();
@@ -46,16 +47,14 @@ int main() {
         std::cout << "Inverse matrix calculation failed." << std::endl;
     }
 
-    // Generate random matrix for Gauss-Jordan inversion
+    // Perform Gauss-Jordan inversion
     int matrixRank = 10;
     ComplexMatrix randomMatrix(matrixRank, matrixRank);
     randomMatrix.auto_gen(1, 10, 1, 10);
-
     std::cout << "Random Matrix for Gauss-Jordan Inversion:" << std::endl;
     randomMatrix.print();
-
-    // Perform Gauss-Jordan inversion
-    ComplexMatrix inverseMatrix = GaussJordanInverse(randomMatrix);
+    GaussJordanInverse gaussJordanInverse(randomMatrix);
+    ComplexMatrix inverseMatrix = gaussJordanInverse.calculate();
     std::cout << "Inverse Matrix using Gauss-Jordan Inversion:" << std::endl;
     inverseMatrix.print();
 
