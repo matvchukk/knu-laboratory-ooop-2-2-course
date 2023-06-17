@@ -7,8 +7,8 @@
 
 #include "ComplexNum.h"
 #include "ComplexMatrix.h"
-#include "LU_Inverse.h"
-#include "GaussJordan.h"
+#include "LUInverse.h"
+#include "GaussJordanInverse.h"
 
 int main() {
     // Generate random matrix
@@ -26,7 +26,7 @@ int main() {
     // Perform LU decomposition
     ComplexMatrix L(matrixSize, matrixSize);
     ComplexMatrix U(matrixSize, matrixSize);
-    if (LU_Inverse::LU_decomposition(A, L, U)) {
+    if (LUInverse::LUDecomposition(A, L, U)) {
         std::cout << "LU Decomposition:" << std::endl;
         std::cout << "L:" << std::endl;
         L.print();
@@ -38,8 +38,8 @@ int main() {
     }
 
     // Perform inverse matrix calculation using LU decomposition
-    ComplexMatrix inverseA = LU_Inverse::LU_inverse(A);
-    if (inverseA.get_rows() != 0) {
+    ComplexMatrix inverseA = LUInverse::calculateLUInverse(A);
+    if (inverseA.getRows() != 0) {
         std::cout << "Inverse Matrix:" << std::endl;
         inverseA.print();
     }
