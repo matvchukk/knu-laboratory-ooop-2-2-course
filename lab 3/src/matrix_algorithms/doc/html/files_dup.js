@@ -1,0 +1,25 @@
+var files_dup =
+[
+    [ "doc_pages", "dir_69c0ad47d15d71cfac8e0d206e4e350d.html", null ],
+    [ "Tests", "dir_33c78a012c8d08979f57a54a07694c46.html", "dir_33c78a012c8d08979f57a54a07694c46" ],
+    [ "ComplexMatrix.cpp", "_complex_matrix_8cpp.html", null ],
+    [ "ComplexMatrix.h", "_complex_matrix_8h.html", "_complex_matrix_8h" ],
+    [ "ComplexNum.cpp", "_complex_num_8cpp.html", "_complex_num_8cpp" ],
+    [ "ComplexNum.h", "_complex_num_8h.html", "_complex_num_8h" ],
+    [ "GaussJordanInverse.cpp", "_gauss_jordan_inverse_8cpp.html", null ],
+    [ "GaussJordanInverse.h", "_gauss_jordan_inverse_8h.html", "_gauss_jordan_inverse_8h" ],
+    [ "LUInverse.cpp", "_l_u_inverse_8cpp.html", null ],
+    [ "LUInverse.h", "_l_u_inverse_8h.html", "_l_u_inverse_8h" ],
+    [ "main.cpp", "main_8cpp.html", "main_8cpp" ],
+    [ "MatrixInverseFactory.cpp", "_matrix_inverse_factory_8cpp.html", null ],
+    [ "MatrixInverseFactory.h", "_matrix_inverse_factory_8h.html", "_matrix_inverse_factory_8h" ],
+    [ "ParallelGaussJordanInverse.cpp", "_parallel_gauss_jordan_inverse_8cpp.html", null ],
+    [ "ParallelGaussJordanInverse.h", "_parallel_gauss_jordan_inverse_8h.html", "_parallel_gauss_jordan_inverse_8h" ],
+    [ "ParallelLUInverse.cpp", "_parallel_l_u_inverse_8cpp.html", null ],
+    [ "ParallelLUInverse.h", "_parallel_l_u_inverse_8h.html", "_parallel_l_u_inverse_8h" ],
+    [ "ParallelStrassen.cpp", "_parallel_strassen_8cpp.html", null ],
+    [ "ParallelStrassen.h", "_parallel_strassen_8h.html", "_parallel_strassen_8h" ],
+    [ "Strassen.cpp", "_strassen_8cpp.html", null ],
+    [ "Strassen.h", "_strassen_8h.html", "_strassen_8h" ],
+    [ "TimeMatrixInverseFactory.h", "_time_matrix_inverse_factory_8h.html", "_time_matrix_inverse_factory_8h" ]
+];
