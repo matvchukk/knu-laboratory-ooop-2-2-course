@@ -1,6 +1,10 @@
 #include "ParallelLUInverse.h"
 #include <mutex>
-
+/// @brief Performs LU decomposition of the input matrix in parallel.
+/// @param a The input matrix to decompose.
+/// @param l The lower triangular matrix (output).
+/// @param u The upper triangular matrix (output).
+/// @return True if the decomposition is successful, false otherwise.
 bool ParallelLUInverse::parallelLUDecomposition(ComplexMatrix inputMatrix, ComplexMatrix& l, ComplexMatrix& u)
 {
     if (inputMatrix.getColumns() != inputMatrix.getRows())
@@ -73,8 +77,9 @@ bool ParallelLUInverse::parallelLUDecomposition(ComplexMatrix inputMatrix, Compl
 
     return true;
 }
-
-
+/// @brief Creates an empty complex number array of size n.
+/// @param n The size of the array.
+/// @return Pointer to the created array.
 ComplexNum* ParallelLUInverse::createEmpty(int size)
 {
     ComplexNum* result = new ComplexNum[size];
@@ -82,7 +87,11 @@ ComplexNum* ParallelLUInverse::createEmpty(int size)
         result[i] = ComplexNum();
     return result;
 }
-
+/// @brief Performs forward substitution for solving a system of equations with a lower triangular matrix.
+/// @param l The lower triangular matrix.
+/// @param vector The input vector.
+/// @param n The size of the matrix and vector.
+/// @return Pointer to the solution vector.
 ComplexNum* ParallelLUInverse::forwardSubstitution(ComplexMatrix l, ComplexNum* vector, int size)
 {
     ComplexNum* result = new ComplexNum[size];
@@ -96,7 +105,11 @@ ComplexNum* ParallelLUInverse::forwardSubstitution(ComplexMatrix l, ComplexNum* 
     }
     return result;
 }
-
+/// @brief Performs back substitution for solving a system of equations with an upper triangular matrix.
+/// @param u The upper triangular matrix.
+/// @param vector The input vector.
+/// @param n The size of the matrix and vector.
+/// @return Pointer to the solution vector.
 ComplexNum* ParallelLUInverse::backSubstitution(ComplexMatrix u, ComplexNum* vector, int size)
 {
     ComplexNum* result = new ComplexNum[size];
@@ -110,7 +123,9 @@ ComplexNum* ParallelLUInverse::backSubstitution(ComplexMatrix u, ComplexNum* vec
     }
     return result;
 }
-
+/// @brief Calculates the inverse of the input matrix using LU decomposition in parallel.
+/// @param a The input matrix.
+/// @return The calculated inverse matrix.
 ComplexMatrix ParallelLUInverse::calculateParallelLUInverse(ComplexMatrix inputMatrix)
 {
     ComplexMatrix l(0, 0);
@@ -136,52 +151,4 @@ ComplexMatrix ParallelLUInverse::calculateParallelLUInverse(ComplexMatrix inputM
 
     return result;
 }
-//#include "ParallelLUInverse.h"
-//
-//ParallelLUInverse::ParallelLUInverse(ComplexMatrix matrix) {
-//    A = matrix;
-//    rank = A.getRows();
-//    columns = A.getColumns();
-//
-//    assert(rank == columns);
-//    assert(rank == A.getRank());
-//
-//    lMatrix = ComplexMatrix(rank, rank);
-//    uMatrix = ComplexMatrix(rank, rank);
-//}
-//
-//ComplexMatrix ParallelLUInverse::calculateParallelLUInverse(ComplexMatrix a) {
-//    A = a;
-//    rank = A.getRows();
-//    columns = A.getColumns();
-//
-//    assert(rank == columns);
-//    assert(rank == A.getRank());
-//
-//    if (!LUInverse::LUDecomposition(A, lMatrix, uMatrix))
-//        return ComplexMatrix(0, 0);
-//
-//    ComplexMatrix result(rank, rank);
-//    std::vector<std::thread> threads;
-//    threads.reserve(rank);
-//
-//    for (int i = 0; i < rank; i++) {
-//        threads.emplace_back([this, i, &result]() {
-//            ComplexNum* unitVector = LUInverse::createEmpty(rank);
-//            unitVector[i] = ComplexNum(1, 0);
-//            ComplexNum* lVector = LUInverse::forwardSubstitution(lMatrix, unitVector, rank);
-//            ComplexNum* uVector = LUInverse::backSubstitution(uMatrix, lVector, rank);
-//            std::lock_guard<std::mutex> lock(mtx);
-//            result.setColumn(i, uVector);
-//            delete[] unitVector;
-//            delete[] lVector;
-//            delete[] uVector;
-//            });
-//    }
-//
-//    for (std::thread& thread : threads) {
-//        thread.join();
-//    }
-//
-//    return result;
-//}
+

@@ -1,6 +1,6 @@
 #include "ParallelGaussJordanInverse.h"
-
-
+/// @brief Constructs a ParallelGaussJordanInverse object with the specified matrix.
+/// @param matrix The input matrix for which to calculate the inverse.
 ParallelGaussJordanInverse::ParallelGaussJordanInverse(ComplexMatrix matrix) {
     A = matrix;
     rank = A.getRows();
@@ -25,7 +25,8 @@ ParallelGaussJordanInverse::ParallelGaussJordanInverse(ComplexMatrix matrix) {
         tempMatrix.set(i, i + rank, ComplexNum(1, 0));
     }
 }
-
+/// @brief Calculates the inverse of the input matrix using the Gauss-Jordan elimination algorithm in parallel.
+/// @return The calculated inverse matrix.
 ComplexMatrix ParallelGaussJordanInverse::calculateParallelGaussJordanInverse() {
     for (int i = 0; i < rank; i++) {
         bool swapped = false;

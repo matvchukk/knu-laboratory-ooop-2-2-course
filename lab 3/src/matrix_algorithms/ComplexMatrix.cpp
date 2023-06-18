@@ -2,7 +2,9 @@
 #include <iostream>
 
 ComplexMatrix::ComplexMatrix() : matrix(nullptr), rows(0), columns(0) {}
-
+/// @brief Parameterized constructor.
+/// @param rows Number of rows in the matrix.
+/// @param columns Number of columns in the matrix.
 ComplexMatrix::ComplexMatrix(unsigned int rows, unsigned int columns)
 {
     matrix = new ComplexNum * [rows];
@@ -13,7 +15,8 @@ ComplexMatrix::ComplexMatrix(unsigned int rows, unsigned int columns)
     this->columns = columns;
     this->rows = rows;
 }
-
+/// @brief Copy constructor.
+/// @param copy The matrix to copy.
 ComplexMatrix::ComplexMatrix(const ComplexMatrix& copy)
 {
     this->rows = copy.rows;
@@ -26,7 +29,7 @@ ComplexMatrix::ComplexMatrix(const ComplexMatrix& copy)
         for (int j = 0; j < copy.columns; j++)
             this->matrix[i][j] = copy.matrix[i][j];
 }
-
+/// @brief Destructor.
 ComplexMatrix::~ComplexMatrix()
 {
     for (int i = 0; i < rows; i++)
@@ -37,7 +40,11 @@ ComplexMatrix::~ComplexMatrix()
     this->rows = 0;
     this->columns = 0;
 }
-
+/// @brief Automatically generate matrix elements within specified ranges.
+/// @param min_real Minimum value for the real part.
+/// @param max_real Maximum value for the real part.
+/// @param min_imag Minimum value for the imaginary part.
+/// @param max_imag Maximum value for the imaginary part.
 void ComplexMatrix::auto_gen(int min_real, int max_real, int min_imag, int max_imag)
 {
     int span_real = abs(max_real - min_real) + 1;
@@ -50,50 +57,66 @@ void ComplexMatrix::auto_gen(int min_real, int max_real, int min_imag, int max_i
         }
     }
 }
-
+/// @brief Get the number of columns in the matrix.
+/// @return Number of columns.
 int ComplexMatrix::getColumns()
 {
     return columns;
 }
-
+/// @brief Get the number of rows in the matrix.
+/// @return Number of rows.
 int ComplexMatrix::getRows()
 {
     return rows;
 }
-
+/// @brief Set the value of a matrix element.
+/// @param i Row index.
+/// @param j Column index.
+/// @param real Real part of the complex number.
+/// @param imag Imaginary part of the complex number.
 void ComplexMatrix::set(unsigned int i, unsigned int j, double real, double imag)
 {
     assert(i < rows);
     assert(j < columns);
     matrix[i][j] = ComplexNum(real, imag);
 }
-
+/// @brief Set the value of a matrix element.
+/// @param i Row index.
+/// @param j Column index.
+/// @param num Complex number.
 void ComplexMatrix::set(unsigned int i, unsigned int j, ComplexNum num)
 {
     assert(i < rows);
     assert(j < columns);
     matrix[i][j] = num;
 }
-
+/// @brief Set the values of a column in the matrix.
+/// @param j Column index.
+/// @param num Array of complex numbers.
 void ComplexMatrix::setColumn(int j, ComplexNum* num)
 {
     for (int i = 0; i < this->rows; i++)
         this->set(i, j, num[i]);
 }
-
+/// @brief Set the values of a row in the matrix.
+/// @param i Row index.
+/// @param num Array of complex numbers.
 void ComplexMatrix::setRow(int i, ComplexNum* num)
 {
     for (int j = 0; j < this->columns; j++)
         this->set(i, j, num[j]);
 }
-
+/// @brief Get the value of a matrix element.
+/// @param i Row index.
+/// @param j Column index.
+/// @return Complex number at the specified position.
 ComplexNum ComplexMatrix::get(unsigned int i, unsigned int j)
 {
     assert(i < rows);
     assert(j < columns);
     return matrix[i][j];
 }
-
+/// @brief Print the matrix elements.
 void ComplexMatrix::print()
 {
     for (int i = 0; i < rows; i++)
@@ -106,7 +129,9 @@ void ComplexMatrix::print()
     }
     std::cout << "\n\n";
 }
-
+/// @brief Swap two rows in the matrix.
+/// @param row1 Index of the first row.
+/// @param row2 Index of the second row.
 void ComplexMatrix::swapRows(int row1, int row2)
 {
     assert(row1 >= 0 && row1 < rows);
@@ -120,7 +145,8 @@ void ComplexMatrix::swapRows(int row1, int row2)
         matrix[row2][i] = temp;
     }
 }
-
+/// @brief Get the rank of the matrix.
+/// @return Rank of the matrix.
 int ComplexMatrix::getRank()
 {
     ComplexMatrix complexMatrix = *this;
@@ -169,7 +195,9 @@ int ComplexMatrix::getRank()
 
     return rank;
 }
-
+/// @brief Assignment operator.
+/// @param copy The matrix to copy.
+/// @return Reference to the assigned matrix.
 ComplexMatrix& ComplexMatrix::operator =(const ComplexMatrix& copy)
 {
     if (this != &copy)
@@ -193,7 +221,9 @@ ComplexMatrix& ComplexMatrix::operator =(const ComplexMatrix& copy)
 
     return *this;
 }
-
+/// @brief Addition operator for matrices.
+/// @param other The matrix to add.
+/// @return Resulting matrix after addition.
 ComplexMatrix ComplexMatrix::operator +(const ComplexMatrix& other) const
 {
     assert(this->rows == other.rows && this->columns == other.columns);
@@ -209,7 +239,9 @@ ComplexMatrix ComplexMatrix::operator +(const ComplexMatrix& other) const
 
     return result;
 }
-
+/// @brief Multiplication operator for matrices.
+/// @param other The matrix to multiply.
+/// @return Resulting matrix after multiplication.
 ComplexMatrix ComplexMatrix::operator *(const ComplexMatrix& other) const
 {
     assert(this->columns == other.rows);
@@ -230,7 +262,9 @@ ComplexMatrix ComplexMatrix::operator *(const ComplexMatrix& other) const
 
     return result;
 }
-
+/// @brief Equality comparison operator for matrices.
+/// @param other The matrix to compare.
+/// @return True if the matrices are equal, false otherwise.
 bool ComplexMatrix::operator ==(const ComplexMatrix& other) const
 {
     if (this->rows != other.rows || this->columns != other.columns)
@@ -247,7 +281,9 @@ bool ComplexMatrix::operator ==(const ComplexMatrix& other) const
 
     return true;
 }
-
+/// @brief Subtraction operator for matrices.
+/// @param other The matrix to subtract.
+/// @return Resulting matrix after subtraction.
 ComplexMatrix ComplexMatrix::operator -(const ComplexMatrix& other) const
 {
     assert(this->rows == other.rows && this->columns == other.columns);

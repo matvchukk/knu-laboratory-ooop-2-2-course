@@ -1,5 +1,9 @@
 #include "LUInverse.h"
-
+/// @brief Performs LU decomposition of the input matrix.
+/// @param a The input matrix to be decomposed.
+/// @param l The lower triangular matrix resulting from the decomposition.
+/// @param u The upper triangular matrix resulting from the decomposition.
+/// @return True if the LU decomposition was successful, false otherwise.
 bool LUInverse::LUDecomposition(ComplexMatrix inputMatrix, ComplexMatrix& l, ComplexMatrix& u)
 {
     if (inputMatrix.getColumns() != inputMatrix.getRows())
@@ -49,7 +53,9 @@ bool LUInverse::LUDecomposition(ComplexMatrix inputMatrix, ComplexMatrix& l, Com
 
     return true;
 }
-
+/// @brief Creates an empty array of ComplexNum objects.
+/// @param n The size of the array.
+/// @return A pointer to the created array.
 ComplexNum* LUInverse::createEmpty(int size)
 {
     ComplexNum* result = new ComplexNum[size];
@@ -57,7 +63,11 @@ ComplexNum* LUInverse::createEmpty(int size)
         result[i] = ComplexNum();
     return result;
 }
-
+/// @brief Performs forward substitution to solve a lower triangular system of equations.
+/// @param l The lower triangular matrix.
+/// @param vector The right-hand side vector.
+/// @param n The size of the system.
+/// @return The solution vector.
 ComplexNum* LUInverse::forwardSubstitution(ComplexMatrix l, ComplexNum* vector, int size)
 {
     ComplexNum* result = new ComplexNum[size];
@@ -71,7 +81,11 @@ ComplexNum* LUInverse::forwardSubstitution(ComplexMatrix l, ComplexNum* vector, 
     }
     return result;
 }
-
+/// @brief Performs back substitution to solve an upper triangular system of equations.
+/// @param u The upper triangular matrix.
+/// @param vector The right-hand side vector.
+/// @param n The size of the system.
+/// @return The solution vector.
 ComplexNum* LUInverse::backSubstitution(ComplexMatrix u, ComplexNum* vector, int size)
 {
     ComplexNum* result = new ComplexNum[size];
@@ -85,7 +99,9 @@ ComplexNum* LUInverse::backSubstitution(ComplexMatrix u, ComplexNum* vector, int
     }
     return result;
 }
-
+/// @brief Calculates the LU inverse of the input matrix.
+/// @param a The input matrix for which to calculate the LU inverse.
+/// @return The calculated LU inverse matrix.
 ComplexMatrix LUInverse::calculateLUInverse(ComplexMatrix inputMatrix)
 {
     ComplexMatrix l(0, 0);

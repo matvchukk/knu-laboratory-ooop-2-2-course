@@ -1,5 +1,8 @@
 #include "Strassen.h"
-
+/// @brief Performs matrix multiplication using the regular algorithm.
+/// @param a The first input matrix.
+/// @param b The second input matrix.
+/// @return Pointer to the resulting matrix.
 ComplexMatrix* Strassen::regularMult(ComplexMatrix* a, ComplexMatrix* b) {
     ComplexMatrix* result = new ComplexMatrix(a->getRows(), b->getColumns());
     for (int i = 0; i < a->getRows(); i++) {
@@ -11,7 +14,10 @@ ComplexMatrix* Strassen::regularMult(ComplexMatrix* a, ComplexMatrix* b) {
     }
     return result;
 }
-
+/// @brief Performs the recursive step of the Strassen algorithm.
+/// @param a The first input matrix.
+/// @param b The second input matrix.
+/// @return Pointer to the resulting matrix.
 ComplexMatrix* Strassen::strassenRecursion(ComplexMatrix* a, ComplexMatrix* b) {
     int n = a->getColumns();
     int m = a->getRows();
@@ -99,7 +105,10 @@ ComplexMatrix* Strassen::strassenRecursion(ComplexMatrix* a, ComplexMatrix* b) {
     delete m7;
     return result;
 }
-
+/// @brief Performs matrix multiplication using the Strassen algorithm.
+/// @param a The first input matrix.
+/// @param b The second input matrix.
+/// @return Pointer to the resulting matrix.
 ComplexMatrix* Strassen::strassenMultiply(ComplexMatrix* a, ComplexMatrix* b) {
     assert(a->getColumns() == b->getRows());
     if (a->getColumns() <= 8 || a->getRows() <= 8 || b->getColumns() <= 8) {

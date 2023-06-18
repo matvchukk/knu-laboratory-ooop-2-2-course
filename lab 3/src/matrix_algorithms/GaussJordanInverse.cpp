@@ -1,6 +1,7 @@
 #include "GaussJordanInverse.h"
 #include <algorithm>
-
+/// @brief Constructs a GaussJordanInverse object with the specified matrix.
+/// @param matrix The complex matrix for which to calculate the Gauss-Jordan inverse.
 GaussJordanInverse::GaussJordanInverse(ComplexMatrix matrix) {
     A = matrix;
     rank = A.getRows();
@@ -25,7 +26,8 @@ GaussJordanInverse::GaussJordanInverse(ComplexMatrix matrix) {
         tempMatrix.set(i, i + rank, ComplexNum(1, 0));
     }
 }
-
+/// @brief Calculates the Gauss-Jordan inverse of the matrix.
+/// @return The calculated Gauss-Jordan inverse matrix.
 ComplexMatrix GaussJordanInverse::calculateGaussJordanInverse() {
     for (int i = 0; i < rank; i++) {
         bool swapped = false;
