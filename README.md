@@ -2,7 +2,7 @@
 
 У цьому репозиторії знаходиться інформація щодо виконання лабораторних робіт з основ ООП за другий семестр.
 
-Було реалізовано І лабораторну:
+Було реалізовано І лабораторну: https://matvchukk.github.io/knu-laboratory-ooop-2-2-course/lab1/lab1a/doc/html/
 
 Було реалізовано ІІ лабораторну та проєкт: https://github.com/yuliapetryk/VisualAlg/tree/main
 
