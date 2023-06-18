@@ -15,7 +15,7 @@ public:
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-        std::cout << "Elapsed time: " << duration.count() << " milliseconds" << std::endl;
+        //std::cout << "Elapsed time: " << duration.count() << " milliseconds" << std::endl;
 
         return inverse;
     }
