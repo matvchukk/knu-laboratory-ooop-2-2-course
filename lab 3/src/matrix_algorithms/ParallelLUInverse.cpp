@@ -1,4 +1,5 @@
 #include "ParallelLUInverse.h"
+#include <mutex>
 
 bool ParallelLUInverse::parallelLUDecomposition(ComplexMatrix inputMatrix, ComplexMatrix& l, ComplexMatrix& u)
 {
@@ -23,6 +24,9 @@ bool ParallelLUInverse::parallelLUDecomposition(ComplexMatrix inputMatrix, Compl
         l.set(i, i, one);
     }
 
+    std::vector<std::mutex> lMutexes(size * size);
+    std::vector<std::mutex> uMutexes(size * size);
+
     std::vector<std::thread> threads;
     for (int i = 0; i < size; i++)
     {
@@ -34,17 +38,30 @@ bool ParallelLUInverse::parallelLUDecomposition(ComplexMatrix inputMatrix, Compl
                 {
                     for (int k = 0; k <= row - 1; k++)
                         toAdd = toAdd - (l.get(row, k) * u.get(k, j));
+
+                    // Блокування м'ютексу перед зміною значення у l
+                    lMutexes[row * size + j].lock();
                     u.set(row, j, toAdd);
+                    lMutexes[row * size + j].unlock();
                 }
                 else
                 {
                     ComplexNum divider = u.get(j, j);
-                    if (divider.getReal() == 0 && divider.getImag() == 0)
-                        return false;
+                    if (std::isnan(divider.getReal()) || std::isnan(divider.getImag()))
+                        return;
+
                     for (int k = 0; k <= j - 1; k++)
                         toAdd = toAdd - (l.get(row, k) * u.get(k, j));
+
+                    // Блокування м'ютексу перед зміною значення у u
+                    uMutexes[row * size + j].lock();
                     toAdd = toAdd / divider;
+                    uMutexes[row * size + j].unlock();
+
+                    // Блокування м'ютексу перед зміною значення у l
+                    lMutexes[row * size + j].lock();
                     l.set(row, j, toAdd);
+                    lMutexes[row * size + j].unlock();
                 }
             }
             }, i));
@@ -56,6 +73,7 @@ bool ParallelLUInverse::parallelLUDecomposition(ComplexMatrix inputMatrix, Compl
 
     return true;
 }
+
 
 ComplexNum* ParallelLUInverse::createEmpty(int size)
 {
@@ -118,3 +136,52 @@ ComplexMatrix ParallelLUInverse::calculateParallelLUInverse(ComplexMatrix inputM
 
     return result;
 }
+//#include "ParallelLUInverse.h"
+//
+//ParallelLUInverse::ParallelLUInverse(ComplexMatrix matrix) {
+//    A = matrix;
+//    rank = A.getRows();
+//    columns = A.getColumns();
+//
+//    assert(rank == columns);
+//    assert(rank == A.getRank());
+//
+//    lMatrix = ComplexMatrix(rank, rank);
+//    uMatrix = ComplexMatrix(rank, rank);
+//}
+//
+//ComplexMatrix ParallelLUInverse::calculateParallelLUInverse(ComplexMatrix a) {
+//    A = a;
+//    rank = A.getRows();
+//    columns = A.getColumns();
+//
+//    assert(rank == columns);
+//    assert(rank == A.getRank());
+//
+//    if (!LUInverse::LUDecomposition(A, lMatrix, uMatrix))
+//        return ComplexMatrix(0, 0);
+//
+//    ComplexMatrix result(rank, rank);
+//    std::vector<std::thread> threads;
+//    threads.reserve(rank);
+//
+//    for (int i = 0; i < rank; i++) {
+//        threads.emplace_back([this, i, &result]() {
+//            ComplexNum* unitVector = LUInverse::createEmpty(rank);
+//            unitVector[i] = ComplexNum(1, 0);
+//            ComplexNum* lVector = LUInverse::forwardSubstitution(lMatrix, unitVector, rank);
+//            ComplexNum* uVector = LUInverse::backSubstitution(uMatrix, lVector, rank);
+//            std::lock_guard<std::mutex> lock(mtx);
+//            result.setColumn(i, uVector);
+//            delete[] unitVector;
+//            delete[] lVector;
+//            delete[] uVector;
+//            });
+//    }
+//
+//    for (std::thread& thread : threads) {
+//        thread.join();
+//    }
+//
+//    return result;
+//}

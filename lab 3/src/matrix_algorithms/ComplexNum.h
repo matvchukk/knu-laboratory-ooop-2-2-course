@@ -21,6 +21,7 @@ public:
 
     void operator=(const ComplexNum& c1);
     ComplexNum operator +(const ComplexNum& c1) const;
+    /*ComplexNum operator +=(const ComplexNum& ñ1) const;*/
     ComplexNum operator -(const ComplexNum& c1) const;
     ComplexNum operator *(const ComplexNum& c1) const;
     ComplexNum operator /(const ComplexNum& c1) const;

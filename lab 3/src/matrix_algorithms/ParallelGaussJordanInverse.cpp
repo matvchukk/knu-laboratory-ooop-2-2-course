@@ -1,7 +1,7 @@
-#include "GaussJordanInverse.h"
-#include <algorithm>
+#include "ParallelGaussJordanInverse.h"
 
-GaussJordanInverse::GaussJordanInverse(ComplexMatrix matrix) {
+
+ParallelGaussJordanInverse::ParallelGaussJordanInverse(ComplexMatrix matrix) {
     A = matrix;
     rank = A.getRows();
     columns = A.getColumns();
@@ -26,7 +26,7 @@ GaussJordanInverse::GaussJordanInverse(ComplexMatrix matrix) {
     }
 }
 
-ComplexMatrix GaussJordanInverse::calculateGaussJordanInverse() {
+ComplexMatrix ParallelGaussJordanInverse::calculateParallelGaussJordanInverse() {
     for (int i = 0; i < rank; i++) {
         bool swapped = false;
         while (tempMatrix.get(i, i) == ComplexNum(0, 0)) {
@@ -40,14 +40,23 @@ ComplexMatrix GaussJordanInverse::calculateGaussJordanInverse() {
         if (tempMatrix.get(i, i) == ComplexNum(0, 0))
             throw std::exception(); // Checking nulls on a principal diagonal
 
+        std::vector<std::thread> threads;
+        threads.reserve(rank - 1);
+
         for (int j = 0; j < rank; j++) {
             if (i != j) {
                 ComplexNum temp = tempMatrix.get(j, i) / tempMatrix.get(i, i);
 
-                for (int k = 0; k < 2 * rank; k++) {
-                    tempMatrix.set(j, k, tempMatrix.get(j, k) - tempMatrix.get(i, k) * temp);
-                }
+                threads.emplace_back([this, i, j, temp]() {
+                    for (int k = 0; k < 2 * rank; k++) {
+                        tempMatrix.set(j, k, tempMatrix.get(j, k) - tempMatrix.get(i, k) * temp);
+                    }
+                    });
             }
+        }
+
+        for (std::thread& thread : threads) {
+            thread.join();
         }
     }
 

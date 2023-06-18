@@ -7,8 +7,7 @@
 
 #include "ComplexNum.h"
 #include "ComplexMatrix.h"
-#include "LUInverse.h"
-#include "GaussJordanInverse.h"
+#include "MatrixInverseFactory.h"
 
 int main() {
     // Generate random matrix
@@ -18,45 +17,49 @@ int main() {
     std::cout << "Random Matrix A:" << std::endl;
     A.print();
 
-    ComplexMatrix E(matrixSize, matrixSize);
+    // Choose inverse algorithm
+    std::cout << "Choose an inverse algorithm: " << std::endl;
+    std::cout << "1. LU Inverse" << std::endl;
+    std::cout << "2. Parallel LU Inverse" << std::endl;
+    std::cout << "3. Gauss-Jordan Inverse" << std::endl;
+    std::cout << "4. Parallel Gauss-Jordan Inverse" << std::endl;
 
-    for (int i = 0; i < matrixSize; i++)
-        E.set(i, i, ComplexNum(1));
+    int algorithmChoice;
+    std::cin >> algorithmChoice;
 
-    // Perform LU decomposition
-    ComplexMatrix L(matrixSize, matrixSize);
-    ComplexMatrix U(matrixSize, matrixSize);
-    if (LUInverse::LUDecomposition(A, L, U)) {
-        std::cout << "LU Decomposition:" << std::endl;
-        std::cout << "L:" << std::endl;
-        L.print();
-        std::cout << "U:" << std::endl;
-        U.print();
-    }
-    else {
-        std::cout << "LU decomposition failed." << std::endl;
-    }
-
-    // Perform inverse matrix calculation using LU decomposition
-    ComplexMatrix inverseA = LUInverse::calculateLUInverse(A);
-    if (inverseA.getRows() != 0) {
-        std::cout << "Inverse Matrix:" << std::endl;
-        inverseA.print();
-    }
-    else {
-        std::cout << "Inverse matrix calculation failed." << std::endl;
+    InverseAlgorithm algorithm;
+    switch (algorithmChoice) {
+    case 1:
+        algorithm = InverseAlgorithm::LU;
+        break;
+    case 2:
+        algorithm = InverseAlgorithm::ParallelLU;
+        break;
+    case 3:
+        algorithm = InverseAlgorithm::GaussJordan;
+        break;
+    case 4:
+        algorithm = InverseAlgorithm::ParallelGaussJordan;
+        break;
+    default:
+        std::cout << "Invalid algorithm choice." << std::endl;
+        return 0;
     }
 
-    // Perform Gauss-Jordan inversion
-    int matrixRank = 10;
-    ComplexMatrix randomMatrix(matrixRank, matrixRank);
-    randomMatrix.auto_gen(1, 10, 1, 10);
-    std::cout << "Random Matrix for Gauss-Jordan Inversion:" << std::endl;
-    randomMatrix.print();
-    GaussJordanInverse gaussJordanInverse(randomMatrix);
-    ComplexMatrix inverseMatrix = gaussJordanInverse.calculate();
-    std::cout << "Inverse Matrix using Gauss-Jordan Inversion:" << std::endl;
-    inverseMatrix.print();
+    try {
+        // Calculate inverse matrix using chosen algorithm
+        ComplexMatrix inverseA = MatrixInverseFactory::calculateInverse(A, algorithm);
+        if (inverseA.getRows() != 0) {
+            std::cout << "Inverse Matrix:" << std::endl;
+            inverseA.print();
+        }
+        else {
+            std::cout << "Inverse matrix calculation failed." << std::endl;
+        }
+    }
+    catch (const std::runtime_error& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
 
     return 0;
 }

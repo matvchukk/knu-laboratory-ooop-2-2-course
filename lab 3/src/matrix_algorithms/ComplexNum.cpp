@@ -31,6 +31,15 @@ ComplexNum ComplexNum::operator +(const ComplexNum& c1) const {
     return new_num;
 }
 
+//ComplexNum ComplexNum::operator +=(const ComplexNum& c1) const {
+//    ComplexNum new_num;
+//    real += c1.real;
+//    imag += c1.imag;
+//
+//    return *c1;
+//}
+
+
 ComplexNum ComplexNum::operator -(const ComplexNum& c1) const {
     ComplexNum new_num;
     new_num.real = this->real - c1.real;

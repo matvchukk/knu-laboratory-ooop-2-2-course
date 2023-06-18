@@ -11,5 +11,5 @@ private:
 public:
     GaussJordanInverse(ComplexMatrix matrix);
 
-    ComplexMatrix calculate();
+    ComplexMatrix calculateGaussJordanInverse();
 };

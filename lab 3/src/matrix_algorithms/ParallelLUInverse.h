@@ -18,3 +18,25 @@ public:
 
     static ComplexMatrix calculateParallelLUInverse(ComplexMatrix a);
 };
+//#pragma once
+//#include "ComplexMatrix.h"
+//#include <vector>
+//#include <mutex>
+//#include <algorithm>
+//#include <thread>
+//#include "LUInverse.h"
+//
+//class ParallelLUInverse {
+//private:
+//    ComplexMatrix A;
+//    int rank;
+//    int columns;
+//    ComplexMatrix lMatrix;
+//    ComplexMatrix uMatrix;
+//    std::mutex mtx;
+//
+//public:
+//    ParallelLUInverse(ComplexMatrix matrix);
+//
+//    static ComplexMatrix calculateParallelLUInverse(ComplexMatrix a);
+//};
