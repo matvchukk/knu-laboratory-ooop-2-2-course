@@ -8,6 +8,7 @@
 #include "ComplexNum.h"
 #include "ComplexMatrix.h"
 #include "MatrixInverseFactory.h"
+#include "TimeMatrixInverseFactory.h"
 
 int main() {
     // Generate random matrix
@@ -47,8 +48,11 @@ int main() {
     }
 
     try {
-        // Calculate inverse matrix using chosen algorithm
-        ComplexMatrix inverseA = MatrixInverseFactory::calculateInverse(A, algorithm);
+        MatrixInverseFactory factory;
+        TimeMatrixInverseFactory timeFactory(factory, algorithm);
+
+        //ComplexMatrix inverseA = timeFactory.calculateInverse(A);
+        ComplexMatrix inverseA = factory.calculateInverse(A, algorithm);
         if (inverseA.getRows() != 0) {
             std::cout << "Inverse Matrix:" << std::endl;
             inverseA.print();
@@ -60,6 +64,7 @@ int main() {
     catch (const std::runtime_error& e) {
         std::cout << "Error: " << e.what() << std::endl;
     }
+
 
     return 0;
 }
