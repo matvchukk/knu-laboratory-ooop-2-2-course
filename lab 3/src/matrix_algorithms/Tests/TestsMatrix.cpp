@@ -190,6 +190,80 @@ TEST_CASE("Matrix Inverse Algorithms with complex values") {
     }
 }
 
+TEST_CASE("Matrix Inverse Algorithms with complex values on incorrect data") {
+    SUBCASE("LU Inverse") {
+        ComplexMatrix A(2, 2);
+        A.set(0, 0, ComplexNum(1, 0));
+        A.set(0, 1, ComplexNum(2, 0));
+        A.set(1, 0, ComplexNum(3, 0));
+        A.set(1, 1, ComplexNum(4, 0));
+
+        ComplexMatrix unexpectedInverse(2, 2);
+        unexpectedInverse.set(0, 0, ComplexNum(1, 0));
+        unexpectedInverse.set(0, 1, ComplexNum(2, 0));
+        unexpectedInverse.set(1, 0, ComplexNum(3, 0));
+        unexpectedInverse.set(1, 1, ComplexNum(5, 0));
+
+        ComplexMatrix inverse = MatrixInverseFactory::calculateInverse(A, InverseAlgorithm::LU);
+        bool matricesAreEqual = (inverse == unexpectedInverse);
+        CHECK_FALSE(matricesAreEqual);
+    }
+
+    SUBCASE("Parallel LU Inverse") {
+        ComplexMatrix A(2, 2);
+        A.set(0, 0, ComplexNum(1, 0));
+        A.set(0, 1, ComplexNum(2, 0));
+        A.set(1, 0, ComplexNum(3, 0));
+        A.set(1, 1, ComplexNum(4, 0));
+
+        ComplexMatrix unexpectedInverse(2, 2);
+        unexpectedInverse.set(0, 0, ComplexNum(1, 0));
+        unexpectedInverse.set(0, 1, ComplexNum(2, 0));
+        unexpectedInverse.set(1, 0, ComplexNum(3, 0));
+        unexpectedInverse.set(1, 1, ComplexNum(5, 0));
+
+        ComplexMatrix inverse = MatrixInverseFactory::calculateInverse(A, InverseAlgorithm::LU);
+        bool matricesAreEqual = (inverse == unexpectedInverse);
+        CHECK_FALSE(matricesAreEqual);
+    }
+
+    SUBCASE("Gauss-Jordan Inverse") {
+        ComplexMatrix A(2, 2);
+        A.set(0, 0, ComplexNum(1, 0));
+        A.set(0, 1, ComplexNum(2, 0));
+        A.set(1, 0, ComplexNum(3, 0));
+        A.set(1, 1, ComplexNum(4, 0));
+
+        ComplexMatrix unexpectedInverse(2, 2);
+        unexpectedInverse.set(0, 0, ComplexNum(1, 0));
+        unexpectedInverse.set(0, 1, ComplexNum(2, 0));
+        unexpectedInverse.set(1, 0, ComplexNum(3, 0));
+        unexpectedInverse.set(1, 1, ComplexNum(5, 0));
+
+        ComplexMatrix inverse = MatrixInverseFactory::calculateInverse(A, InverseAlgorithm::GaussJordan);
+        bool matricesAreEqual = (inverse == unexpectedInverse);
+        CHECK_FALSE(matricesAreEqual);
+    }
+
+    SUBCASE("Parallel Gauss-Jordan Inverse") {
+        ComplexMatrix A(2, 2);
+        A.set(0, 0, ComplexNum(1, 0));
+        A.set(0, 1, ComplexNum(2, 0));
+        A.set(1, 0, ComplexNum(3, 0));
+        A.set(1, 1, ComplexNum(4, 0));
+
+        ComplexMatrix unexpectedInverse(2, 2);
+        unexpectedInverse.set(0, 0, ComplexNum(1, 0));
+        unexpectedInverse.set(0, 1, ComplexNum(2, 0));
+        unexpectedInverse.set(1, 0, ComplexNum(3, 0));
+        unexpectedInverse.set(1, 1, ComplexNum(5, 0));
+
+        ComplexMatrix inverse = MatrixInverseFactory::calculateInverse(A, InverseAlgorithm::ParallelGaussJordan);
+        bool matricesAreEqual = (inverse == unexpectedInverse);
+        CHECK_FALSE(matricesAreEqual);
+    }
+}
+
 TEST_CASE("Matrix Inverse Algorithms with complex values with time measurement") {
     SUBCASE("LU Inverse") {
         ComplexMatrix A(4, 4);
@@ -321,3 +395,113 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with time measurement")
 
 }
 
+TEST_CASE("Matrix Inverse Algorithms with complex values with random values and average time measurement") {
+    SUBCASE("LU Inverse") {
+        srand(static_cast<unsigned int>(time(0)));
+        std::vector<double> executionTimes;
+        for (int i = 0; i < 100; ++i) {
+            ComplexMatrix A(4, 4);
+            A.auto_gen(50000, 500000, 50000, 500000);
+            MatrixInverseFactory factory;
+            TimeMatrixInverseFactory timeFactory(factory, InverseAlgorithm::LU);
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            ComplexMatrix inverse = timeFactory.calculateInverse(A);
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
+            ComplexMatrix product = A * inverse;
+            bool isIdentity = isIdentityMatrix(product);
+            //std::cout << "Matrix " << i + 1 << " LU Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            //A.print();
+            //product.print();
+            executionTimes.push_back(duration.count());
+            CHECK(isIdentity);
+        }
+        double totalExecutionTime = 0;
+        for (double time : executionTimes) {
+            totalExecutionTime += time;
+        }
+        double averageExecutionTime = totalExecutionTime / executionTimes.size();
+        std::cout << "Average LU Inverse Execution Time: " << averageExecutionTime << " seconds" << std::endl;
+    }
+    SUBCASE("Parallel LU Inverse") {
+        srand(static_cast<unsigned int>(time(0)));
+        std::vector<double> executionTimes;
+        for (int i = 0; i < 100; ++i) {
+            ComplexMatrix A(4, 4);
+            A.auto_gen(50000, 500000, 50000, 500000);
+            MatrixInverseFactory factory;
+            TimeMatrixInverseFactory timeFactory(factory, InverseAlgorithm::LU);
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            ComplexMatrix inverse = timeFactory.calculateInverse(A);
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
+            ComplexMatrix product = A * inverse;
+            bool isIdentity = isIdentityMatrix(product);
+            //std::cout << "Matrix " << i + 1 << " Parallel LU Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            //A.print();
+            //product.print();
+            executionTimes.push_back(duration.count());
+            CHECK(isIdentity);
+        }
+        double totalExecutionTime = 0;
+        for (double time : executionTimes) {
+            totalExecutionTime += time;
+        }
+        double averageExecutionTime = totalExecutionTime / executionTimes.size();
+        std::cout << "Average Parallel LU Inverse Execution Time: " << averageExecutionTime << " seconds" << std::endl;
+    }
+    SUBCASE("Gauss-Jordan Inverse") {
+        srand(static_cast<unsigned int>(time(0)));
+        std::vector<double> executionTimes;
+        for (int i = 0; i < 100; ++i) {
+            ComplexMatrix A(4, 4);
+            A.auto_gen(50000, 500000, 50000, 500000);
+            MatrixInverseFactory factory;
+            TimeMatrixInverseFactory timeFactory(factory, InverseAlgorithm::GaussJordan);
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            ComplexMatrix inverse = timeFactory.calculateInverse(A);
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
+            ComplexMatrix product = A * inverse;
+            bool isIdentity = isIdentityMatrix(product);
+            //std::cout << "Matrix " << i + 1 << " Gauss-Jordan Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            //A.print();
+            //product.print();
+            executionTimes.push_back(duration.count());
+            CHECK(isIdentity);
+        }
+        double totalExecutionTime = 0;
+        for (double time : executionTimes) {
+            totalExecutionTime += time;
+        }
+        double averageExecutionTime = totalExecutionTime / executionTimes.size();
+        std::cout << "Average Gauss-Jordan Inverse Execution Time: " << averageExecutionTime << " seconds" << std::endl;
+    }
+    SUBCASE("Parallel Gauss-Jordan Inverse") {
+        srand(static_cast<unsigned int>(time(0)));
+        std::vector<double> executionTimes;
+        for (int i = 0; i < 100; ++i) {
+            ComplexMatrix A(4, 4);
+            A.auto_gen(50000, 500000, 50000, 500000);
+            MatrixInverseFactory factory;
+            TimeMatrixInverseFactory timeFactory(factory, InverseAlgorithm::ParallelGaussJordan);
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            ComplexMatrix inverse = timeFactory.calculateInverse(A);
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
+            ComplexMatrix product = A * inverse;
+            bool isIdentity = isIdentityMatrix(product);
+            //std::cout << "Matrix " << i + 1 << " Parallel Gauss-Jordan Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            //A.print();
+            //product.print();
+            executionTimes.push_back(duration.count());
+            CHECK(isIdentity);
+        }
+        double totalExecutionTime = 0;
+        for (double time : executionTimes) {
+            totalExecutionTime += time;
+        }
+        double averageExecutionTime = totalExecutionTime / executionTimes.size();
+        std::cout << "Average Parallel Gauss-Jordan Inverse Execution Time: " << averageExecutionTime << " seconds" << std::endl;
+    }
+}
