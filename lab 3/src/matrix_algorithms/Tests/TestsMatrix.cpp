@@ -1,8 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
-#include "ComplexMatrix.h"
-#include "MatrixInverseFactory.h"
-#include "TimeMatrixInverseFactory.h"
+#include "../ComplexMatrix.h"
+#include "../MatrixInverseFactory.h"
+#include "../TimeMatrixInverseFactory.h"
 
 bool isIdentityMatrix(ComplexMatrix& matrix) {
     int rows = matrix.getRows();

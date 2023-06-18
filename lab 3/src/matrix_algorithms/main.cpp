@@ -9,7 +9,7 @@
 #include "ComplexMatrix.h"
 #include "MatrixInverseFactory.h"
 #include "TimeMatrixInverseFactory.h"
-#include "doctest.h"
+#include "Tests/doctest.h"
 
 namespace lab {
     int doctest() {
