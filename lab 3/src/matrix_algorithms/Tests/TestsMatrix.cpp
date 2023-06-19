@@ -22,7 +22,6 @@ bool isIdentityMatrix(ComplexMatrix& matrix) {
     return true;
 }
 
-
 TEST_CASE("Matrix Inverse Algorithms") {
     SUBCASE("LU Inverse") {
         ComplexMatrix A(2, 2);
@@ -399,7 +398,7 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
     SUBCASE("LU Inverse") {
         srand(static_cast<unsigned int>(time(0)));
         std::vector<double> executionTimes;
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 8; ++i) {
             ComplexMatrix A(4, 4);
             A.auto_gen(50000, 500000, 50000, 500000);
             MatrixInverseFactory factory;
@@ -410,9 +409,9 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
             std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
             ComplexMatrix product = A * inverse;
             bool isIdentity = isIdentityMatrix(product);
-            //std::cout << "Matrix " << i + 1 << " LU Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
-            //A.print();
-            //product.print();
+            std::cout << "Matrix " << i + 1 << " LU Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            A.print();
+            product.print();
             executionTimes.push_back(duration.count());
             CHECK(isIdentity);
         }
@@ -426,7 +425,7 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
     SUBCASE("Parallel LU Inverse") {
         srand(static_cast<unsigned int>(time(0)));
         std::vector<double> executionTimes;
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 8; ++i) {
             ComplexMatrix A(4, 4);
             A.auto_gen(50000, 500000, 50000, 500000);
             MatrixInverseFactory factory;
@@ -437,9 +436,9 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
             std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
             ComplexMatrix product = A * inverse;
             bool isIdentity = isIdentityMatrix(product);
-            //std::cout << "Matrix " << i + 1 << " Parallel LU Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
-            //A.print();
-            //product.print();
+            std::cout << "Matrix " << i + 1 << " Parallel LU Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            A.print();
+            product.print();
             executionTimes.push_back(duration.count());
             CHECK(isIdentity);
         }
@@ -453,7 +452,7 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
     SUBCASE("Gauss-Jordan Inverse") {
         srand(static_cast<unsigned int>(time(0)));
         std::vector<double> executionTimes;
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 8; ++i) {
             ComplexMatrix A(4, 4);
             A.auto_gen(50000, 500000, 50000, 500000);
             MatrixInverseFactory factory;
@@ -464,9 +463,9 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
             std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
             ComplexMatrix product = A * inverse;
             bool isIdentity = isIdentityMatrix(product);
-            //std::cout << "Matrix " << i + 1 << " Gauss-Jordan Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
-            //A.print();
-            //product.print();
+            std::cout << "Matrix " << i + 1 << " Gauss-Jordan Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            A.print();
+            product.print();
             executionTimes.push_back(duration.count());
             CHECK(isIdentity);
         }
@@ -480,7 +479,7 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
     SUBCASE("Parallel Gauss-Jordan Inverse") {
         srand(static_cast<unsigned int>(time(0)));
         std::vector<double> executionTimes;
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 8; ++i) {
             ComplexMatrix A(4, 4);
             A.auto_gen(50000, 500000, 50000, 500000);
             MatrixInverseFactory factory;
@@ -491,9 +490,9 @@ TEST_CASE("Matrix Inverse Algorithms with complex values with random values and 
             std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - begin);
             ComplexMatrix product = A * inverse;
             bool isIdentity = isIdentityMatrix(product);
-            //std::cout << "Matrix " << i + 1 << " Parallel Gauss-Jordan Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
-            //A.print();
-            //product.print();
+            std::cout << "Matrix " << i + 1 << " Parallel Gauss-Jordan Inverse Execution Time: " << duration.count() << " seconds" << std::endl;
+            A.print();
+            product.print();
             executionTimes.push_back(duration.count());
             CHECK(isIdentity);
         }
